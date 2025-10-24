@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	t "github.com/OliverKeefe/git-cleanse/core/ui"
+	t "github.com/OliverKeefe/git-cleanse/core/types"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )
