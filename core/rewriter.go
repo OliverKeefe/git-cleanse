@@ -1,18 +1,34 @@
 package core
 
-type ToReplace []string
-type DontReplace []string
+import (
+	"regexp"
+
+	"github.com/OliverKeefe/git-cleanse/core/types"
+)
+
+type ToRewrite []string
+type RewriteWith []string
 
 type Rewriter struct {
-	PII    ToReplace
-	notPII DontReplace
+	rewrite     ToRewrite
+	rewriteWith RewriteWith
 }
 
-func NewRewriter(replace []string, dontReplace []string) Rewriter {
+func NewRewriter(toRewrite []string, rewriteWith []string) Rewriter {
 	return Rewriter{
-		PII:    replace,
-		notPII: dontReplace,
+		rewrite:     toRewrite,
+		rewriteWith: rewriteWith,
 	}
+}
+
+func (rewriter Rewriter) RewritePII(commits []types.Commit) []types.Commit {
+	return rewriter.RewriteHelper(commits, rewriter.rewriteWith, rewriter.rewrite)
+}
+
+func (rewriter Rewriter) ReverseRewrite(commits []types.Commit) []types.Commit {
+	return rewriter.RewriteHelper(commits, rewriter.rewrite, rewriter.rewriteWith)
+}
+
 func (rewriter Rewriter) RewriteHelper(commits []types.Commit, to []string, from []string) []types.Commit {
 	for i, commit := range commits {
 		for j, pattern := range from {
