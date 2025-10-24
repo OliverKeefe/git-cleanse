@@ -1,7 +1,10 @@
 package routes
 
 import (
-	t "github.com/OliverKeefe/git-cleanse/core/ui"
+	"fmt"
+
+	"github.com/OliverKeefe/git-cleanse/core/auth"
+	t "github.com/OliverKeefe/git-cleanse/core/types"
 	"github.com/OliverKeefe/git-cleanse/core/ui/pages"
 	tea "github.com/charmbracelet/bubbletea"
 )
@@ -21,7 +24,7 @@ func NewRootModel() RootModel {
 		currentPage: PageStartMenu,
 		pages: map[t.PageID]tea.Model{
 			PageStartMenu: pages.NewMenuModel(),
-			PageGitLab:    pages.NewSimplePage("Gitlab Selected"),
+			PageGitLab:    pages.NewAuthPage("GitLab"),
 		},
 	}
 }
@@ -33,6 +36,17 @@ func (rootModel RootModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case t.NavigateMsg:
 		rootModel.currentPage = msg.To
 		return rootModel, nil
+
+	case t.AuthSubmittedMsg:
+		switch msg.Platform {
+		case "GitLab":
+			client, err := auth.GetGitLabClient(msg.Token)
+			if err != nil {
+				fmt.Println("Failed to create GitLab client:", err)
+			} else {
+				fmt.Println("GITLAB CLIENT:", client)
+			}
+		}
 	}
 
 	current := rootModel.pages[rootModel.currentPage]
