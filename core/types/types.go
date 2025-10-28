@@ -15,3 +15,4 @@ type Commit struct {
 	Body   string
 	Footer string
 }
+type RepoPath string
