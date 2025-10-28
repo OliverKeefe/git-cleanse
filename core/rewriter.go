@@ -44,3 +44,9 @@ func (rewriter Rewriter) RewriteHelper(commits []types.Commit, to []string, from
 	}
 	return commits
 }
+
+// TODO: func (rewriter Rewriter) ScanFor
+
+func (types.Commit) GetRepoCommits(path types.RepoPath) []types.Commit {
+	panic("GetRepoCommits not implemented yet.")
+}
