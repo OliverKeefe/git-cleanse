@@ -46,9 +46,9 @@ func TestRewriter_ReverseRewrite(t *testing.T) {
 	}
 
 	commit := types.Commit{
-		Header: "feat: add config and super-secret-keything23817s%$3",
-		Body:   "this is a commit body message containing super-secret-keything23817s%$3 and other such things.",
-		Footer: "Author: david.smith@aol.com",
+		Author:    "feat: add config and super-secret-keything23817s%$3",
+		Committer: "this is a commit body message containing super-secret-keything23817s%$3 and other such things.",
+		Message:   "Author: david.smith@aol.com",
 	}
 
 	var commits []types.Commit
@@ -58,16 +58,19 @@ func TestRewriter_ReverseRewrite(t *testing.T) {
 	reversedResults := rewriter.ReverseRewrite(results)
 
 	expected := types.Commit{
-		Header: "feat: add config and super-secret-keything23817s%$3",
-		Body:   "this is a commit body message containing super-secret-keything23817s%$3 and other such things.",
-		Footer: "Author: david.smith@aol.com",
+		Author:    "feat: add config and super-secret-keything23817s%$3",
+		Committer: "this is a commit body message containing super-secret-keything23817s%$3 and other such things.",
+		Message:   "Author: david.smith@aol.com",
 	}
 
-	if reversedResults[0].Header != expected.Header {
-		t.Errorf("Expected commit Header to be: %s, got: %s", expected.Header, reversedResults[0].Header)
+	if reversedResults[0].Author != expected.Author {
+		t.Errorf("Expected commit Header to be: %s, got: %s", expected.Author, reversedResults[0].Author)
 	}
-	if reversedResults[0].Body != expected.Body {
-		t.Errorf("Expected commit Body to be: %s, got: %s", expected.Body, reversedResults[0].Body)
+	if reversedResults[0].Committer != expected.Committer {
+		t.Errorf("Expected commit Body to be: %s, got: %s", expected.Committer, reversedResults[0].Committer)
+	}
+	if reversedResults[0].Message != expected.Message {
+		t.Errorf("Expected commit Footer to be: %s, got: %s", expected.Message, reversedResults[0].Message)
 	}
 }
 
