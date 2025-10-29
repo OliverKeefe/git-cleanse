@@ -3,6 +3,8 @@ package core
 import (
 	"fmt"
 	"github.com/go-git/go-git/v6"
+	"github.com/go-git/go-git/v6/plumbing/object"
+	"io"
 	"log"
 	"os"
 	"regexp"
@@ -39,9 +41,9 @@ func (rewriter Rewriter) RewriteHelper(commits []types.Commit, to []string, from
 			re := regexp.MustCompile(regexp.QuoteMeta(pattern))
 
 			if j < len(to) {
-				commit.Header = re.ReplaceAllString(commit.Header, to[j])
-				commit.Body = re.ReplaceAllString(commit.Body, to[j])
-				commit.Footer = re.ReplaceAllString(commit.Footer, to[j])
+				commit.Author = re.ReplaceAllString(commit.Author, to[j])
+				commit.Committer = re.ReplaceAllString(commit.Committer, to[j])
+				commit.Message = re.ReplaceAllString(commit.Message, to[j])
 			}
 		}
 		commits[i] = commit
@@ -76,6 +78,25 @@ func GetRepo(path string, uri string, isLocal bool) (*git.Repository, error) {
 }
 
 // TODO: Get commits stored in slice in memory for iteration.
-//func (types.Commit) GetRepoCommits(repo *git.Repository) []types.Commit {
-//	repo.com
-//}
+func GetRepoCommits(repo *git.Repository) ([]*object.Commit, error) {
+	var commits []*object.Commit
+
+	iter, err := repo.CommitObjects()
+	if err != nil {
+		return nil, fmt.Errorf("failed to get commit iterator: %w", err)
+	}
+	defer iter.Close()
+
+	for {
+		commit, err := iter.Next()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return nil, fmt.Errorf("failed to read commit object: %w", err)
+		} else {
+			commits = append(commits, commit)
+		}
+	}
+	return commits, nil
+}
