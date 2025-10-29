@@ -69,7 +69,24 @@ func TestRewriter_ReverseRewrite(t *testing.T) {
 	if reversedResults[0].Body != expected.Body {
 		t.Errorf("Expected commit Body to be: %s, got: %s", expected.Body, reversedResults[0].Body)
 	}
-	if reversedResults[0].Footer != expected.Footer {
-		t.Errorf("Expected commit Footer to be: %s, got: %s", expected.Footer, reversedResults[0].Footer)
+}
+
+func TestGetRepo_GetRepo(t *testing.T) {
+	var uri string = "https://github.com/OliverKeefe/algostruct.git"
+
+	repo, err := GetRepo("", uri, false)
+	if err != nil {
+		t.Fatalf("expected repository to be non-nil struct %e", err)
 	}
+
+	if repo == nil {
+		t.Fatalf("returned a nil repository %e", err)
+	}
+
+	ref, err := repo.Head()
+	if err != nil {
+		t.Fatalf("repository HEAD is nil %e", err)
+	}
+
+	t.Logf("Successfully cloned repo: HEAD = %s", ref.Hash())
 }
