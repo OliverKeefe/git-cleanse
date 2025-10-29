@@ -12,9 +12,9 @@ func TestRewriter_RewritePII(t *testing.T) {
 	}
 
 	commit := types.Commit{
-		Header: "feat: add config and super-secret-keything23817s%$3",
-		Body:   "this is a commit body message containing super-secret-keything23817s%$3 and other such things.",
-		Footer: "Author: david.smith@aol.com",
+		Author:    "feat: add config and super-secret-keything23817s%$3",
+		Committer: "this is a commit body message containing super-secret-keything23817s%$3 and other such things.",
+		Message:   "Author: david.smith@aol.com",
 	}
 
 	var commits []types.Commit
@@ -23,19 +23,19 @@ func TestRewriter_RewritePII(t *testing.T) {
 	results := rewriter.RewritePII(commits)
 
 	expected := types.Commit{
-		Header: "feat: add config and XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-		Body:   "this is a commit body message containing XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX and other such things.",
-		Footer: "Author: anon@noreply.github.com",
+		Author:    "feat: add config and XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+		Committer: "this is a commit body message containing XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX and other such things.",
+		Message:   "Author: anon@noreply.github.com",
 	}
 
-	if results[0].Header != expected.Header {
-		t.Errorf("Expected commit Header to be: %s, got: %s", expected.Header, results[0].Header)
+	if results[0].Committer != expected.Committer {
+		t.Errorf("Expected commit Header to be: %s, got: %s", expected.Committer, results[0].Committer)
 	}
-	if results[0].Body != expected.Body {
-		t.Errorf("Expected commit Body to be: %s, got: %s", expected.Body, results[0].Body)
+	if results[0].Committer != expected.Committer {
+		t.Errorf("Expected commit Body to be: %s, got: %s", expected.Committer, results[0].Committer)
 	}
-	if results[0].Footer != expected.Footer {
-		t.Errorf("Expected commit Footer to be: %s, got: %s", expected.Footer, results[0].Footer)
+	if results[0].Message != expected.Message {
+		t.Errorf("Expected commit Footer to be: %s, got: %s", expected.Message, results[0].Message)
 	}
 }
 
