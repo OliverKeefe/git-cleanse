@@ -1,6 +1,10 @@
 package core
 
 import (
+	"fmt"
+	"github.com/go-git/go-git/v6"
+	"log"
+	"os"
 	"regexp"
 
 	"github.com/OliverKeefe/git-cleanse/core/types"
@@ -47,6 +51,31 @@ func (rewriter Rewriter) RewriteHelper(commits []types.Commit, to []string, from
 
 // TODO: func (rewriter Rewriter) ScanFor
 
-func (types.Commit) GetRepoCommits(path types.RepoPath) []types.Commit {
-	panic("GetRepoCommits not implemented yet.")
+func GetRepo(path string, uri string, isLocal bool) (*git.Repository, error) {
+	if isLocal {
+		repo, err := git.PlainOpen(path)
+		if err != nil {
+			return nil, fmt.Errorf("failed to open repo: %w", err)
+		}
+		return repo, nil
+	} else {
+		dir, err := os.MkdirTemp("", "repo-*")
+		if err != nil {
+			return nil, fmt.Errorf("failed to create temp dir to clone repo to: %w", err)
+		}
+
+		repo, err := git.PlainClone(dir, &git.CloneOptions{
+			URL:      uri,
+			Progress: os.Stdout,
+		})
+		if err != nil {
+			log.Fatal(err)
+		}
+		return repo, nil
+	}
 }
+
+// TODO: Get commits stored in slice in memory for iteration.
+//func (types.Commit) GetRepoCommits(repo *git.Repository) []types.Commit {
+//	repo.com
+//}
