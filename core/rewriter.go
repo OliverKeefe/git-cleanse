@@ -27,22 +27,24 @@ func NewRewriter(toRewrite []string, rewriteWith []string) Rewriter {
 	}
 }
 
-func (rewriter Rewriter) RewritePII(commits []types.Commit) []types.Commit {
+func (rewriter Rewriter) RewritePII(commits []*object.Commit) []*object.Commit {
 	return rewriter.RewriteHelper(commits, rewriter.rewriteWith, rewriter.rewrite)
 }
 
-func (rewriter Rewriter) ReverseRewrite(commits []types.Commit) []types.Commit {
+func (rewriter Rewriter) ReverseRewrite(commits []*object.Commit) []*object.Commit {
 	return rewriter.RewriteHelper(commits, rewriter.rewrite, rewriter.rewriteWith)
 }
 
-func (rewriter Rewriter) RewriteHelper(commits []types.Commit, to []string, from []string) []types.Commit {
+func (rewriter Rewriter) RewriteHelper(commits []*object.Commit, to []string, from []string) []*object.Commit {
 	for i, commit := range commits {
 		for j, pattern := range from {
 			re := regexp.MustCompile(regexp.QuoteMeta(pattern))
 
 			if j < len(to) {
-				commit.Author = re.ReplaceAllString(commit.Author, to[j])
-				commit.Committer = re.ReplaceAllString(commit.Committer, to[j])
+				commit.Author.Email = re.ReplaceAllString(commit.Author.Email, to[j])
+				commit.Author.Name = re.ReplaceAllString(commit.Author.Name, to[j])
+				commit.Committer.Email = re.ReplaceAllString(commit.Committer.Email, to[j])
+				commit.Committer.Name = re.ReplaceAllString(commit.Committer.Name, to[j])
 				commit.Message = re.ReplaceAllString(commit.Message, to[j])
 			}
 		}
