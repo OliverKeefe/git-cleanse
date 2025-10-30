@@ -13,12 +13,15 @@ type StartMenuModel struct {
 	cursor   int
 	choices  []string
 	selected string
+	width    int
+	height   int
 }
 
 func NewMenuModel() StartMenuModel {
 	return StartMenuModel{
 		cursor: 0,
-		choices: []string{"Local Repository",
+		choices: []string{
+			"Local Repository",
 			"Github",
 			"GitLab",
 		},
@@ -28,6 +31,9 @@ func NewMenuModel() StartMenuModel {
 
 func (menuModel StartMenuModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
+	case tea.WindowSizeMsg:
+		menuModel.width = msg.Width
+		menuModel.height = msg.Height
 
 	case tea.KeyMsg:
 		switch msg.String() {
@@ -97,7 +103,17 @@ func (menuModel StartMenuModel) View() string {
 	}
 
 	content := boxStyle.Render(builder.String())
-	return lipgloss.Place(80, 20, lipgloss.Center, lipgloss.Center, content)
+
+	width := menuModel.width
+	height := menuModel.height
+	if width == 0 {
+		width = 80
+	}
+	if height == 0 {
+		height = 24
+	}
+
+	return lipgloss.Place(menuModel.width, menuModel.height, lipgloss.Center, lipgloss.Center, content)
 }
 
 func (menuModel StartMenuModel) Selected() string {
