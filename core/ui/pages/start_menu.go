@@ -83,12 +83,14 @@ func (menuModel StartMenuModel) View() string {
 
 	boxStyle := lipgloss.NewStyle().
 		Border(lipgloss.RoundedBorder()).
-		Padding(1, 2).
-		Margin(1, 2).
+		Padding(1, 4).
+		Margin(1).
+		Width(menuModel.width - 50).
 		BorderForeground(lipgloss.Color("63"))
 
 	var builder strings.Builder
-	builder.WriteString(titleStyle.Render("Select an Option:\n\n"))
+	builder.WriteString(titleStyle.Render("Select an Option:"))
+	builder.WriteString("\n\n")
 
 	for i, choice := range menuModel.choices {
 		cursor := " "
