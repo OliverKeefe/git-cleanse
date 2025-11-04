@@ -2,6 +2,7 @@ package pages
 
 import (
 	"fmt"
+	gitlab "gitlab.com/gitlab-org/api/client-go"
 
 	t "github.com/OliverKeefe/git-cleanse/core/types"
 	"github.com/charmbracelet/bubbles/textinput"
@@ -14,6 +15,12 @@ type AuthPageModel struct {
 	cursor   int
 	input    []textinput.Model
 	err      error
+}
+
+type AuthResultMsg struct {
+	Success  bool
+	Platform string
+	Error    error
 }
 
 const (
