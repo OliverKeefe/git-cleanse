@@ -2,7 +2,9 @@ package pages
 
 import (
 	"fmt"
+	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/charmbracelet/lipgloss"
 	"github.com/go-git/go-git/v6"
 	gitlab "gitlab.com/gitlab-org/api/client-go"
 )
@@ -14,6 +16,7 @@ type RepoItem struct {
 
 type GitLabPageModel struct {
 	Cursor             int
+	list               list.Model
 	ListOfRepositories []RepoItem
 	Repository         []*git.Repository
 	Selected           string
@@ -69,7 +72,15 @@ func (model GitLabPageModel) Init() tea.Cmd {
 }
 
 func (model GitLabPageModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	panic("Not implemented yet.")
+	//var cmds []tea.Cmd
+
+	switch msg := msg.(type) {
+	case tea.WindowSizeMsg:
+		h, v := appStyle.GetFrameSize()
+		model.list.SetSize(msg.Width-h, msg.Height-v)
+	}
+
+	return model, nil
 }
 
 func (model GitLabPageModel) View() string {
