@@ -56,3 +56,7 @@ func (model GitLabPageModel) Init() tea.Cmd {
 func (model GitLabPageModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	panic("Not implemented yet.")
 }
+
+func (model GitLabPageModel) View() string {
+	panic("Not implemented yet.")
+}
