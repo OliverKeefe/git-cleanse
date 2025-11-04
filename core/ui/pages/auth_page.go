@@ -87,6 +87,19 @@ func (authModel AuthPageModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					authModel.input[i].Blur()
 				}
 			}
+
+			if msg.String() == "enter" && authModel.cursor == len(authModel.input)-1 {
+				email := authModel.input[email].Value()
+				token := authModel.input[token].Value()
+
+				return authModel, func() tea.Msg {
+					_, _, err := AuthenticateGitLab(email, token)
+					if err != nil {
+						return AuthResultMsg{Success: false, Platform: authModel.platform, Error: err}
+					}
+					return AuthResultMsg{Success: true, Platform: authModel.platform}
+				}
+			}
 		}
 	}
 
