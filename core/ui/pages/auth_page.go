@@ -144,4 +144,14 @@ func (m AuthPageModel) View() string {
 	)
 }
 
+func AuthenticateGitLab(email string, token string) (*gitlab.Client, string, error) {
+	client, err := gitlab.NewClient(token)
+	user := email
+	if err != nil {
+		return nil, user, fmt.Errorf("could not authenticate gitlab for user %u, %e", user, err)
+	}
+
+	return client, user, nil
+}
+
 func (authModel AuthPageModel) Init() tea.Cmd { return nil }
