@@ -21,6 +21,21 @@ type GitLabPageModel struct {
 	Height             int
 }
 
+var (
+	appStyle = lipgloss.NewStyle().Padding(1, 2)
+
+	titleStyle = lipgloss.NewStyle().
+			Foreground(lipgloss.Color("#FFFDF5")).
+			Background(lipgloss.Color("#25A065")).
+			Padding(0, 1)
+
+	statusMessageStyle = lipgloss.NewStyle().
+				Foreground(lipgloss.AdaptiveColor{Light: "#04B575", Dark: "#04B575"}).
+				Render
+)
+
+// NewGitLabPageModel constructs a new Gitlab Page Model.
+// param: token string
 func NewGitLabPageModel(token string, uri string, baseUrl string) (GitLabPageModel, error) {
 	var projectList []RepoItem
 
@@ -58,7 +73,7 @@ func (model GitLabPageModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (model GitLabPageModel) View() string {
-	panic("Not implemented yet.")
+	return appStyle.Render(model.list.View())
 }
 
 func GitLabBool(v bool) *bool {
