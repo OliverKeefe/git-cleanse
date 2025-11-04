@@ -15,16 +15,18 @@ type RootModel struct {
 }
 
 const (
-	PageStartMenu t.PageID = "StartMenu"
-	PageGitLab    t.PageID = "GitLab"
+	PageStartMenu  t.PageID = "StartMenu"
+	PageAuthGitLab t.PageID = "GitLab"
+	PageListGitLab t.PageID = "GitLabList"
 )
 
 func NewRootModel() RootModel {
 	return RootModel{
 		currentPage: PageStartMenu,
 		pages: map[t.PageID]tea.Model{
-			PageStartMenu: pages.NewMenuModel(),
-			PageGitLab:    pages.NewAuthPage("GitLab"),
+			PageStartMenu:  pages.NewMenuModel(),
+			PageAuthGitLab: pages.NewAuthPage("GitLab"),
+			PageListGitLab: pages.NewAuthPage("GitLabList"),
 		},
 	}
 }
