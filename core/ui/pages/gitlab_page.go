@@ -52,3 +52,7 @@ func NewGitLabPageModel(token string, uri string, baseUrl string) (GitLabPageMod
 func (model GitLabPageModel) Init() tea.Cmd {
 	return nil
 }
+
+func (model GitLabPageModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	panic("Not implemented yet.")
+}
