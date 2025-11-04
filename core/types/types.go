@@ -1,5 +1,7 @@
 package types
 
+import "github.com/go-git/go-git/v6/plumbing/hash"
+
 type PageID string
 type NavigateMsg struct {
 	To PageID
@@ -11,8 +13,12 @@ type AuthSubmittedMsg struct {
 }
 
 type Commit struct {
-	Header string
-	Body   string
-	Footer string
+	Author       string
+	Committer    string
+	Message      string
+	TreeHash     hash.Hash
+	ParentHashes []hash.Hash
 }
 type RepoPath string
+
+type BasePath string
