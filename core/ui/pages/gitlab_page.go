@@ -48,3 +48,7 @@ func NewGitLabPageModel(token string, uri string, baseUrl string) (GitLabPageMod
 		ListOfRepositories: projectList,
 	}, nil
 }
+
+func (model GitLabPageModel) Init() tea.Cmd {
+	return nil
+}
