@@ -30,11 +30,11 @@ func NewGitLabPageModel(token string, uri string, baseUrl string) (GitLabPageMod
 	}
 
 	projects, _, err := client.Projects.ListProjects(&gitlab.ListProjectsOptions{
-		Membership: gitlab.BoolValue(true),
-		Simple:     gitlab.BoolValue(true),
+		Membership: GitLabBool(true),
+		Simple:     GitLabBool(true),
 	})
 	if err != nil {
-		return RepoPageModel{}, fmt.Errorf("failed to get gitlab projects %e", err)
+		return GitLabPageModel{}, fmt.Errorf("failed to get gitlab projects %e", err)
 	}
 
 	for _, p := range projects {
@@ -59,4 +59,8 @@ func (model GitLabPageModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (model GitLabPageModel) View() string {
 	panic("Not implemented yet.")
+}
+
+func GitLabBool(v bool) *bool {
+	return &v
 }
