@@ -1,10 +1,40 @@
-package repositories
+package repos
 
 import (
 	"log"
 
 	gitlab "gitlab.com/gitlab-org/api/client-go"
 )
+
+type GitlabUser struct {
+	Email string
+	Token string
+}
+
+func InitGitLab(email string, token string, baseurl *string) (*gitlab.Client, *GitlabUser, error) {
+	var (
+		client *gitlab.Client
+		err    error
+	)
+
+	if baseurl != nil && *baseurl != "" {
+		client, err = gitlab.NewClient(token, gitlab.WithBaseURL(*baseurl))
+	} else {
+		client, err = gitlab.NewClient(token)
+	}
+
+	if err != nil {
+		log.Printf("unable to initialize gitlab client: %e", err)
+		return nil, nil, err
+	}
+
+	user := &GitlabUser{
+		Email: email,
+		Token: token,
+	}
+
+	return client, user, nil
+}
 
 func ListGitLabProjects(client *gitlab.Client) ([]*gitlab.Project, error) {
 	// Pagination
