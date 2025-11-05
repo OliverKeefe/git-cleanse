@@ -1,9 +1,6 @@
 package routes
 
 import (
-	"fmt"
-
-	"github.com/OliverKeefe/git-cleanse/core/auth"
 	t "github.com/OliverKeefe/git-cleanse/core/types"
 	"github.com/OliverKeefe/git-cleanse/core/ui/pages"
 	tea "github.com/charmbracelet/bubbletea"
