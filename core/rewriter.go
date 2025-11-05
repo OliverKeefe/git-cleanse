@@ -8,8 +8,6 @@ import (
 	"log"
 	"os"
 	"regexp"
-
-	"github.com/OliverKeefe/git-cleanse/core/types"
 )
 
 type ToRewrite []string
