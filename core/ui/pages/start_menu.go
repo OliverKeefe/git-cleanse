@@ -56,12 +56,18 @@ func (menuModel StartMenuModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			switch menuModel.selected {
 			case "GitLab":
 				target = t.NavigateMsg{To: "GitLab"}
+
+			case "Local Repository":
+				target = t.NavigateMsg{To: "Local"}
+
 			default:
 				target = t.NavigateMsg{To: "StartMenu"}
+
 			}
 			return menuModel, func() tea.Msg {
 				return target
 			}
+
 		}
 	}
 	return menuModel, nil
