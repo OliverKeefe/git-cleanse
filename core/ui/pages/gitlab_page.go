@@ -16,6 +16,7 @@ type RepoItem struct {
 
 type GitLabPageModel struct {
 	Cursor             int
+	Client             *gitlab.Client
 	list               list.Model
 	ListOfRepositories []RepoItem
 	Repository         []*git.Repository
@@ -39,52 +40,41 @@ var (
 
 // NewGitLabPageModel constructs a new Gitlab Page Model.
 // param: token string
-func NewGitLabPageModel(token string, uri string, baseUrl string) (GitLabPageModel, error) {
-	var projectList []RepoItem
-
-	client, err := gitlab.NewClient(token)
-	if err != nil {
-		return GitLabPageModel{}, fmt.Errorf("unable to get gitlab client %e", err)
-	}
-
-	projects, _, err := client.Projects.ListProjects(&gitlab.ListProjectsOptions{
-		Membership: GitLabBool(true),
-		Simple:     GitLabBool(true),
-	})
-	if err != nil {
-		return GitLabPageModel{}, fmt.Errorf("failed to get gitlab projects %e", err)
-	}
-
-	for _, p := range projects {
-		projectList = append(projectList, RepoItem{
-			Title:       p.Name,
-			Description: p.Description,
-		})
-	}
-	return GitLabPageModel{
-		Cursor:             0,
-		ListOfRepositories: projectList,
-	}, nil
+func (m GitLabPageModel) NewGitLabModel() (tea.Model, tea.Cmd) {
+	return GitLabPageModel{}, nil
 }
 
-func (model GitLabPageModel) Init() tea.Cmd {
-	return nil
-}
+//func GetGitLabRepos() ([]RepoItem, error) {
+//	var projectList []RepoItem
+//
+//	client := &gitlab.Client
+//
+//	projects, err := repos.ListGitLabProjects(client)
+//
+//	for _, p := range projects {
+//		projectList = append(projectList, RepoItem{
+//			Title:       p.Name,
+//			Description: p.Description,
+//		})
+//	}
+//	return GitLabPageModel{
+//		Cursor:             0,
+//		ListOfRepositories: projectList,
+//	}, nil
+//}
 
 func (model GitLabPageModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	//var cmds []tea.Cmd
-
-	switch msg := msg.(type) {
-	case tea.WindowSizeMsg:
-		h, v := appStyle.GetFrameSize()
-		model.list.SetSize(msg.Width-h, msg.Height-v)
-	}
 
 	return model, nil
 }
 
 func (model GitLabPageModel) View() string {
 	return appStyle.Render(model.list.View())
+}
+
+func (model GitLabPageModel) Init() tea.Cmd {
+	return nil
 }
 
 func GitLabBool(v bool) *bool {
