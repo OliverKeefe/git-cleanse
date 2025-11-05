@@ -15,18 +15,18 @@ type RootModel struct {
 }
 
 const (
-	PageStartMenu  t.PageID = "StartMenu"
-	PageAuthGitLab t.PageID = "GitLab"
-	PageListGitLab t.PageID = "GitLabList"
+	PageStartMenu t.PageID = "StartMenu"
+	PageGitLab    t.PageID = "GitLab"
+	PageGitHub    t.PageID = "GitHub"
+	PageLocalRepo t.PageID = "Local"
 )
 
 func NewRootModel() RootModel {
 	return RootModel{
 		currentPage: PageStartMenu,
 		pages: map[t.PageID]tea.Model{
-			PageStartMenu:  pages.NewMenuModel(),
-			PageAuthGitLab: pages.NewAuthPage("GitLab"),
-			PageListGitLab: pages.NewAuthPage("GitLabList"),
+			PageStartMenu: pages.NewMenuModel(),
+			PageLocalRepo: pages.NewLocalRepoModel(),
 		},
 	}
 }
@@ -38,17 +38,6 @@ func (rootModel RootModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case t.NavigateMsg:
 		rootModel.currentPage = msg.To
 		return rootModel, nil
-
-	case t.AuthSubmittedMsg:
-		switch msg.Platform {
-		case "GitLab":
-			client, err := auth.GetGitLabClient(msg.Token)
-			if err != nil {
-				fmt.Println("Failed to create GitLab client:", err)
-			} else {
-				fmt.Println("GITLAB CLIENT:", client)
-			}
-		}
 	}
 
 	current := rootModel.pages[rootModel.currentPage]
