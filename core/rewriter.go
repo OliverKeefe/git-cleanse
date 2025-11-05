@@ -54,7 +54,7 @@ func (rewriter Rewriter) RewriteHelper(commits []*object.Commit, to []string, fr
 // TODO: func (rewriter Rewriter) ScanFor
 
 func GetRepo(path string, uri string, isLocal bool) (*git.Repository, error) {
-	if isLocal {
+	if !isLocal {
 		repo, err := git.PlainOpen(path)
 		if err != nil {
 			return nil, fmt.Errorf("failed to open repo: %w", err)
